@@ -19,11 +19,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const logoutHandler = async () => {
+    const token = auth.token;
+    const res = await fetch("http://localhost:3000/api/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token }),
+    });
+    if (res.ok) {
+      setAuth({});
+    }
+  };
   const values = {
     loginSubmitHandler,
+    logoutHandler,
     username: auth.username,
     isAuth: !!auth.email,
     authError: auth.message,
+    token: auth.token,
   };
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };
