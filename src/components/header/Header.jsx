@@ -10,10 +10,10 @@ export default function Header() {
   const { isAuth, username, logoutHandler } = useContext(AuthContext);
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
+    <Navbar expand="xl" className="bg-body-tertiary">
+      <Container style={{ maxWidth: "1560px" }}>
         <Navbar.Brand as={Link} to={"/"}>
-          React-Bootstrap
+          SilverStar Portal
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
