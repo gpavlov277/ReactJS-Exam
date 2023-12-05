@@ -5,6 +5,8 @@ export default function useForm(submitHandler, initialValues) {
 
   const onChange = (e) => {
     setValues((state) => ({ ...state, [e.target.name]: e.target.value }));
+    console.log(e.target.name);
+    console.log(e.target.value);
   };
 
   const onSubmit = (e) => {

@@ -7,17 +7,19 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [auth, setAuth] = usePersistedState("auth", {});
+  const [err, setErr] = useState({});
 
   const loginSubmitHandler = async (values) => {
     const response = await authService.login(values.email, values.password);
+
     if (response.ok) {
       const result = await response.json();
       setAuth(result);
-      // localStorage.setItem("accessToken", result.token);
+
       navigate("/");
     } else {
       const result = await response.json();
-      setAuth(result);
+      setErr(result);
     }
   };
 
@@ -32,15 +34,35 @@ export const AuthProvider = ({ children }) => {
     });
     if (res.ok) {
       setAuth({});
-      // localStorage.removeItem("accessToken");
+    }
+  };
+
+  const registerSubmitHandler = async (values) => {
+    const response = await authService.register(
+      values.email,
+      values.username,
+      values.password,
+      values.rePass
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+      setAuth(result);
+      console.log(result);
+
+      navigate("/");
+    } else {
+      const result = await response.json();
+      setErr(result);
     }
   };
   const values = {
     loginSubmitHandler,
     logoutHandler,
+    registerSubmitHandler,
     username: auth.username,
     isAuth: !!auth.email,
-    authError: auth.message,
+    authError: err.message,
     token: auth.token,
   };
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
