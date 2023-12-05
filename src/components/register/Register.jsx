@@ -13,7 +13,7 @@ export default function Register() {
   };
 
   const { registerSubmitHandler, authError, setErr, isLoading } = useContext(AuthContext);
-  const { values, onChange, onSubmit } = useForm(registerSubmitHandler, {
+  const { values, onChange, onSubmit, formValidate } = useForm(registerSubmitHandler, {
     [RegisterFormKeys.Email]: "",
     [RegisterFormKeys.Username]: "",
     [RegisterFormKeys.Password]: "",
@@ -42,7 +42,8 @@ export default function Register() {
             value={values[RegisterFormKeys.Username]}
             onChange={onChange}
           />
-          <p className="form-error">This field is required</p>
+          {formValidate["username"] && <p className="form-error">{formValidate.username}</p>}
+
           <input
             type="email"
             id="login"
@@ -52,6 +53,7 @@ export default function Register() {
             value={values[RegisterFormKeys.Email]}
             onChange={onChange}
           />
+          {formValidate["email"] && <p className="form-error">{formValidate.email}</p>}
           <input
             type="password"
             id="password"
@@ -61,6 +63,7 @@ export default function Register() {
             value={values[RegisterFormKeys.Password]}
             onChange={onChange}
           />
+          {formValidate["password"] && <p className="form-error">{formValidate.password}</p>}
 
           <input
             type="password"
@@ -71,6 +74,10 @@ export default function Register() {
             value={values[RegisterFormKeys.RePass]}
             onChange={onChange}
           />
+          {formValidate["repeatPassword"] && (
+            <p className="form-error">{formValidate.repeatPassword}</p>
+          )}
+
           <div>
             <p className="form-error">{authError}</p>
             {isLoading && <Loader />}
