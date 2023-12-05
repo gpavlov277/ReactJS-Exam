@@ -1,8 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./Login.css";
 import { Link } from "react-router-dom";
 import AuthContext from "../../contexts/authContext";
 import useForm from "../../hooks/useForm";
+import Loader from "../loader/Loader";
 
 const LoginFormKeys = {
   Email: "email",
@@ -10,11 +11,15 @@ const LoginFormKeys = {
 };
 
 export default function Login() {
-  const { loginSubmitHandler, authError } = useContext(AuthContext);
+  const { loginSubmitHandler, authError, setErr, isLoading } = useContext(AuthContext);
   const { values, onChange, onSubmit } = useForm(loginSubmitHandler, {
     [LoginFormKeys.Email]: "",
     [LoginFormKeys.Password]: "",
   });
+
+  useEffect(() => {
+    setErr({});
+  }, []);
 
   return (
     <div className="wrapper fadeInDown mt-4">
@@ -29,7 +34,7 @@ export default function Login() {
           <input
             type="text"
             id="login"
-            className="fadeIn second"
+            className="fadeIn first"
             name={LoginFormKeys.Email}
             placeholder="email"
             value={values[LoginFormKeys.Email]}
@@ -39,13 +44,16 @@ export default function Login() {
           <input
             type="password"
             id="password"
-            className="fadeIn third"
+            className="fadeIn first"
             name={LoginFormKeys.Password}
             placeholder="password"
             value={values[LoginFormKeys.Password]}
             onChange={onChange}
           />
-          <p className="form-error">{authError}</p>
+          <div>
+            <p className="form-error">{authError}</p>
+            {isLoading && <Loader />}
+          </div>
           <input type="submit" className="fadeIn fourth" value="Log In" />
         </form>
       </div>

@@ -1,15 +1,9 @@
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-
-// import styles from "./Login.module.css";
 import "./Register.css";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../contexts/authContext";
 import useForm from "../../hooks/useForm";
+import Loader from "../loader/Loader";
 export default function Register() {
   const RegisterFormKeys = {
     Email: "email",
@@ -18,13 +12,18 @@ export default function Register() {
     RePass: "repeatPassword",
   };
 
-  const { registerSubmitHandler, authError } = useContext(AuthContext);
+  const { registerSubmitHandler, authError, setErr, isLoading } = useContext(AuthContext);
   const { values, onChange, onSubmit } = useForm(registerSubmitHandler, {
     [RegisterFormKeys.Email]: "",
     [RegisterFormKeys.Username]: "",
     [RegisterFormKeys.Password]: "",
     [RegisterFormKeys.RePass]: "",
   });
+
+  useEffect(() => {
+    setErr({});
+  }, []);
+
   return (
     <div className="wrapper fadeInDown mt-4">
       <div id="formContent">
@@ -43,6 +42,7 @@ export default function Register() {
             value={values[RegisterFormKeys.Username]}
             onChange={onChange}
           />
+          <p className="form-error">This field is required</p>
           <input
             type="email"
             id="login"
@@ -71,8 +71,10 @@ export default function Register() {
             value={values[RegisterFormKeys.RePass]}
             onChange={onChange}
           />
-          <p className="form-error">{authError}</p>
-
+          <div>
+            <p className="form-error">{authError}</p>
+            {isLoading && <Loader />}
+          </div>
           <input type="submit" className="fadeIn second" value="Register" />
         </form>
       </div>
