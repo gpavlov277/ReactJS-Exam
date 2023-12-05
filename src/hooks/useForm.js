@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import AuthContext from "../contexts/authContext";
 
 export default function useForm(submitHandler, initialValues) {
   const [values, setValues] = useState(initialValues);
@@ -8,7 +9,11 @@ export default function useForm(submitHandler, initialValues) {
     password: false,
     repeatPassword: false,
   });
+
+  const { setErr } = useContext(AuthContext);
+
   const onChange = (e) => {
+    setErr({});
     setValues((state) => ({ ...state, [e.target.name]: e.target.value }));
 
     switch (e.target.name) {
@@ -23,7 +28,7 @@ export default function useForm(submitHandler, initialValues) {
         if (e.target.value.length < 5) {
           setFormValidate((state) => ({
             ...state,
-            [e.target.name]: "Username should be at least 5 charactersword",
+            [e.target.name]: "Username should be at least 5 characters",
           }));
         } else {
           setFormValidate((state) => ({ ...state, [e.target.name]: false }));
@@ -47,11 +52,15 @@ export default function useForm(submitHandler, initialValues) {
         }
         break;
       case "repeatPassword":
-        if (values["password"] === e.target.value) {
+        if (values["password"] === e.target.value && e.target.value.length >= 5) {
           setFormValidate((state) => ({ ...state, [e.target.name]: false }));
           setFormValidate((state) => ({ ...state, password: false }));
         } else {
-          setFormValidate((state) => ({ ...state, [e.target.name]: "Password do not match!" }));
+          if (e.target.value.length >= 5) {
+            setFormValidate((state) => ({ ...state, [e.target.name]: false }));
+          } else {
+            setFormValidate((state) => ({ ...state, [e.target.name]: "Password do not match!" }));
+          }
         }
 
         break;
