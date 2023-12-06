@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import "./Comments.css";
 
+import NavDropdown from "react-bootstrap/NavDropdown";
+
 import * as commentService from "../../services/commentService";
+import { Link } from "react-router-dom";
 export default function Comments({ item }) {
   const [comments, setComments] = useState([]);
 
@@ -66,6 +69,14 @@ export default function Comments({ item }) {
                   <h5 className="m-2">{c.userId.username}</h5>
                   <span className="mr-2 dot"></span>
                   <span className="m-2">{c.created_at}</span>
+                  <NavDropdown title="✏️" id="basic-nav-dropdown">
+                    <NavDropdown.Item as={Link} to={"/profile-settings"}>
+                      Edit
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to={"/profile-settings"}>
+                      Delete
+                    </NavDropdown.Item>
+                  </NavDropdown>
                 </div>
                 <div className="comment-text-sm">
                   <span>{c.text}</span>

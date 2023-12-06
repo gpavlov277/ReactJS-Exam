@@ -21,6 +21,9 @@ export default function Header() {
             <Nav.Link as={Link} to={"/"}>
               Home
             </Nav.Link>
+            <Nav.Link as={Link} to={"/create/item"}>
+              Create
+            </Nav.Link>
 
             {!isAuth && (
               <>

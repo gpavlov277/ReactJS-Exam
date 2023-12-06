@@ -25,7 +25,7 @@ export default function Register() {
   }, []);
 
   return (
-    <div className="wrapper fadeInDown mt-4">
+    <div className="wrapper fadeInDown mt-4" style={{ minHeight: "75vh" }}>
       <div id="formContent">
         <Link to={"/login"}>
           <h2 className="inactive underlineHover"> Log In </h2>

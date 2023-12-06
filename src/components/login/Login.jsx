@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import "./Login.css";
 import { Link } from "react-router-dom";
 import AuthContext from "../../contexts/authContext";
@@ -22,7 +22,7 @@ export default function Login() {
   }, []);
 
   return (
-    <div className="wrapper fadeInDown mt-4">
+    <div className="wrapper fadeInDown mt-4" style={{ minHeight: "75vh" }}>
       <div id="formContent">
         <h2 className="active"> Log In </h2>
 

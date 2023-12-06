@@ -6,6 +6,7 @@ import { AuthProvider } from "./contexts/authContext";
 import List from "./components/list/List";
 import Footer from "./components/footer/Footer";
 import ItemDetails from "./components/item-details/ItemDetails";
+import Create from "./components/create/Create";
 function App() {
   return (
     <>
@@ -15,8 +16,10 @@ function App() {
         <Routes>
           <Route path="/" element={<List></List>}></Route>
           <Route path="/login" element={<Login />}></Route>
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Register />}></Route>
 
+          <Route path="/create/item" element={<Create />}></Route>
+          <Route path="/item/:itemId/edit" element={""}></Route>
           <Route path="/item/:itemId" element={<ItemDetails></ItemDetails>}></Route>
         </Routes>
       </AuthProvider>
