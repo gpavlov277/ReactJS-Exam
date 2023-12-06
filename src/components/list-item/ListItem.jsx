@@ -1,7 +1,6 @@
-import Col from "react-bootstrap/Col";
-
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import { Link } from "react-router-dom";
 export default function ListItem({ _id, themeName, themeImg, userId, created_at, subscribers }) {
   return (
     <Card style={{ maxWidth: "38rem", paddingTop: "20px" }}>
@@ -10,7 +9,9 @@ export default function ListItem({ _id, themeName, themeImg, userId, created_at,
         <Card.Title>{themeName}</Card.Title>
         <Card.Title>{subscribers.length}</Card.Title>
 
-        <Button variant="primary">See more</Button>
+        <Link to={`/item/${_id}`}>
+          <Button variant="primary">See more</Button>
+        </Link>
       </Card.Body>
     </Card>
   );
