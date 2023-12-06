@@ -1,6 +1,21 @@
+import { useEffect, useState } from "react";
 import "./Comments.css";
 
+import * as commentService from "../../services/commentService";
 export default function Comments({ item }) {
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    commentService
+      .getAll()
+      .then((result) => setComments(result))
+      .catch((err) => console.log(err));
+  }, []);
+
+  const currComments = comments.filter((x) => x.themeId._id === item._id);
+
+  console.log(currComments);
+
   return (
     <div className="container mt-5 mb-5">
       <div className="d-flex justify-content-center row">
@@ -45,31 +60,29 @@ export default function Comments({ item }) {
                 Comment
               </button>
             </div>
+            {currComments.map((c) => (
+              <div className="commented-section mt-2" key={c._id}>
+                <div className="d-flex flex-row align-items-center commented-user">
+                  <h5 className="m-2">{c.userId.username}</h5>
+                  <span className="mr-2 dot"></span>
+                  <span className="m-2">{c.created_at}</span>
+                </div>
+                <div className="comment-text-sm">
+                  <span>{c.text}</span>
+                </div>
 
-            <div className="commented-section mt-2">
-              <div className="d-flex flex-row align-items-center commented-user">
-                <h5 className="m-2">Nasko Dimitrov</h5>
-                <span className="mr-2 dot"></span>
-                <span className="m-2">4 hours ago</span>
-              </div>
-              <div className="comment-text-sm">
-                <span>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                  exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </span>
-              </div>
-
-              <div className="reply-section">
-                <div className="d-flex flex-row align-items-center voting-icons">
-                  <i className="fa fa-sort-up fa-2x mt-3 hit-voting"></i>
-                  <i className="fa fa-sort-down fa-2x mb-3 hit-voting"></i>
-                  <span className="ml-2">10</span>
-                  <span className="dot m-2"></span>
-                  <h6 className="ml-2 mb-0">Likes</h6>
+                <div className="reply-section">
+                  <div className="d-flex flex-row align-items-center voting-icons">
+                    <i className="fa fa-sort-up fa-2x mt-3 hit-voting"></i>
+                    <i className="fa fa-sort-down fa-2x mb-3 hit-voting"></i>
+                    <span className="m-2">{c.likes.length}</span>
+                    <span className="dot m-2"></span>
+                    <h6 className="ml-2 mb-0">Likes</h6>
+                    <h6 className="m-2 ">Edit</h6>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
