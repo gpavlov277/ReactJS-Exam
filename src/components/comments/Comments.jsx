@@ -41,7 +41,7 @@ export default function Comments({ item }) {
               </div>
 
               <div className="d-flex flex-row align-items-center align-content-center post-title">
-                <span className="bdge m-2">{item?.themeName}</span>
+                <span className="bdge m-2">{item?.heading}</span>
                 <span className="mr-2 dot"></span>
                 <span className="m-2">{item?.created_at}</span>
               </div>
@@ -89,7 +89,6 @@ export default function Comments({ item }) {
                     <span className="m-2">{c.likes.length}</span>
                     <span className="dot m-2"></span>
                     <h6 className="ml-2 mb-0">Likes</h6>
-                    <h6 className="m-2 ">Edit</h6>
                   </div>
                 </div>
               </div>

@@ -18,17 +18,26 @@ export default function ItemDetails() {
       .catch((err) => console.log(err));
   }, []);
 
+  const getDetails = (item) => {
+    if (item.details) {
+      const details = item.details.split(",");
+      return details;
+    } else {
+      return ["No project details added"];
+    }
+  };
+
   return (
     <>
       {isLoading ? (
         <OverlayLoader />
       ) : (
         <div className="container">
-          <h1 className="my-4">{item?.themeName}</h1>
+          <h1 className="my-4">{item?.heading}</h1>
 
           <div className="row">
             <div className="col-md-8">
-              <img className="img-fluid" src={item.themeImg} alt="" />
+              <img className="img-fluid" src={item.image} alt="" />
             </div>
 
             <div
@@ -36,17 +45,12 @@ export default function ItemDetails() {
               style={{ margin: "auto", overflow: "scroll", maxHeight: "535px" }}
             >
               <h3 className="my-3">Photo Description</h3>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio,
-                gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et,
-                interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.
-              </p>
+              <p>{item.about}</p>
               <h3 className="my-3">Project Details</h3>
               <ul>
-                <li>Lorem Ipsum</li>
-                <li>Dolor Sit Amet</li>
-                <li>Consectetur</li>
-                <li>Adipiscing Elit</li>
+                {getDetails(item).map((d) => (
+                  <li key={Math.random(1000) * 2}>{d}</li>
+                ))}
               </ul>
             </div>
           </div>

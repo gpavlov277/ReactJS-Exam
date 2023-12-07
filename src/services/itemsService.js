@@ -9,3 +9,17 @@ export const getOne = async (itemId) => {
   const response = await fetch(`${baseUrl}/${itemId}`);
   return response.json();
 };
+
+export const create = async (itemData) => {
+  const response = await fetch(`${baseUrl}`, {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    body: JSON.stringify(itemData),
+  });
+
+  return response;
+};

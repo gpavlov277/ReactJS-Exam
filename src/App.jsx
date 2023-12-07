@@ -7,6 +7,7 @@ import List from "./components/list/List";
 import Footer from "./components/footer/Footer";
 import ItemDetails from "./components/item-details/ItemDetails";
 import Create from "./components/create/Create";
+import { ItemProvider } from "./contexts/itemContext";
 function App() {
   return (
     <>
@@ -17,8 +18,15 @@ function App() {
           <Route path="/" element={<List></List>}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
+          <Route
+            path="/create/item"
+            element={
+              <ItemProvider>
+                <Create />
+              </ItemProvider>
+            }
+          ></Route>
 
-          <Route path="/create/item" element={<Create />}></Route>
           <Route path="/item/:itemId/edit" element={""}></Route>
           <Route path="/item/:itemId" element={<ItemDetails></ItemDetails>}></Route>
         </Routes>

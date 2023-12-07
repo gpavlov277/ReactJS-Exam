@@ -3,6 +3,7 @@ import AuthContext from "../contexts/authContext";
 
 export default function useForm(submitHandler, initialValues) {
   const [values, setValues] = useState(initialValues);
+
   const [formValidate, setFormValidate] = useState({
     email: false,
     username: false,
@@ -56,7 +57,7 @@ export default function useForm(submitHandler, initialValues) {
           setFormValidate((state) => ({ ...state, [e.target.name]: false }));
           setFormValidate((state) => ({ ...state, password: false }));
         } else {
-          if (e.target.value.length >= 5) {
+          if (e.target.value.length >= 5 && e.target.value === values["password"]) {
             setFormValidate((state) => ({ ...state, [e.target.name]: false }));
           } else {
             setFormValidate((state) => ({ ...state, [e.target.name]: "Password do not match!" }));

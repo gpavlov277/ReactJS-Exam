@@ -4,6 +4,7 @@ import * as authService from "../services/authService";
 import usePersistedState from "../hooks/usePersistedState";
 
 const AuthContext = createContext();
+
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [auth, setAuth] = usePersistedState("auth", {});
