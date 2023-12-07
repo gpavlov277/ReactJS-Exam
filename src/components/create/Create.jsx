@@ -1,5 +1,5 @@
 import Loader from "../loader/Loader";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import ItemContext from "../../contexts/itemContext";
 import useForm from "../../hooks/useForm";
 
@@ -11,15 +11,17 @@ const CreateFormKeys = {
   Details: "details",
 };
 export default function Create() {
-  const { onCreateSubmit, test } = useContext(ItemContext);
-  const { values, onChange, onSubmit, formValidate } = useForm(onCreateSubmit, {
+  const { onCreateSubmit, isLoading, createError, setCreateError } = useContext(ItemContext);
+  const { values, onChange, onSubmit, formValidate, onTouch } = useForm(onCreateSubmit, {
     [CreateFormKeys.Heading]: "",
     [CreateFormKeys.About]: "",
     [CreateFormKeys.Location]: "",
     [CreateFormKeys.Image]: "",
     [CreateFormKeys.Details]: "",
   });
-
+  useEffect(() => {
+    setCreateError({});
+  }, []);
   return (
     <div className="wrapper mt-4" style={{ minHeight: "78vh" }}>
       <div id="formContent">
@@ -34,7 +36,9 @@ export default function Create() {
             name={CreateFormKeys.Heading}
             value={values[CreateFormKeys.Heading]}
             onChange={onChange}
+            onFocus={onTouch}
           />
+          {formValidate["heading"] && <p className="form-error">{formValidate.heading}</p>}
 
           <input
             type="text"
@@ -44,7 +48,9 @@ export default function Create() {
             name={CreateFormKeys.About}
             value={values[CreateFormKeys.About]}
             onChange={onChange}
+            onFocus={onTouch}
           />
+          {formValidate["about"] && <p className="form-error">{formValidate.about}</p>}
 
           <input
             type="text"
@@ -64,8 +70,9 @@ export default function Create() {
             name={CreateFormKeys.Image}
             value={values[CreateFormKeys.Image]}
             onChange={onChange}
+            onFocus={onTouch}
           />
-
+          {formValidate["image"] && <p className="form-error">{formValidate.image}</p>}
           <input
             type="text"
             id="details"
@@ -75,10 +82,12 @@ export default function Create() {
             value={values[CreateFormKeys.Details]}
             onChange={onChange}
           />
-
-          <div>
-            <Loader />
-          </div>
+          <p className="form-error">{createError.message}</p>
+          {isLoading && (
+            <div>
+              <Loader />
+            </div>
+          )}
 
           <input type="submit" className="fadeIn first" value="Add" />
         </form>

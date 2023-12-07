@@ -8,6 +8,7 @@ import Footer from "./components/footer/Footer";
 import ItemDetails from "./components/item-details/ItemDetails";
 import Create from "./components/create/Create";
 import { ItemProvider } from "./contexts/itemContext";
+import EditItem from "./components/edit-item/EditItem";
 function App() {
   return (
     <>
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<List></List>}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
+
           <Route
             path="/create/item"
             element={
@@ -26,6 +28,8 @@ function App() {
               </ItemProvider>
             }
           ></Route>
+
+          <Route path="/edit/item/:itemId" element={<EditItem />} />
 
           <Route path="/item/:itemId/edit" element={""}></Route>
           <Route path="/item/:itemId" element={<ItemDetails></ItemDetails>}></Route>

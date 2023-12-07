@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
     });
     if (res.ok) {
       setAuth({});
+      navigate("/");
     }
   };
 

@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import AuthContext from "../contexts/authContext";
+import ItemContext from "../contexts/itemContext";
 
 export default function useForm(submitHandler, initialValues) {
   const [values, setValues] = useState(initialValues);
@@ -9,12 +10,20 @@ export default function useForm(submitHandler, initialValues) {
     username: false,
     password: false,
     repeatPassword: false,
+    heading: false,
+    about: false,
+    image: false,
   });
 
+  // const { setCreateError } = useContext(ItemContext);
   const { setErr } = useContext(AuthContext);
 
+  function onTouch(e) {
+    onChange(e);
+  }
   const onChange = (e) => {
     setErr({});
+    // setCreateError({});
     setValues((state) => ({ ...state, [e.target.name]: e.target.value }));
 
     switch (e.target.name) {
@@ -63,6 +72,24 @@ export default function useForm(submitHandler, initialValues) {
             setFormValidate((state) => ({ ...state, [e.target.name]: "Password do not match!" }));
           }
         }
+      case "heading":
+        if (e.target.value.length <= 0) {
+          setFormValidate((state) => ({ ...state, [e.target.name]: "This field is required" }));
+        } else {
+          setFormValidate((state) => ({ ...state, [e.target.name]: false }));
+        }
+      case "about":
+        if (e.target.value.length <= 0) {
+          setFormValidate((state) => ({ ...state, [e.target.name]: "This field is required" }));
+        } else {
+          setFormValidate((state) => ({ ...state, [e.target.name]: false }));
+        }
+      case "image":
+        if (e.target.value.length <= 0) {
+          setFormValidate((state) => ({ ...state, [e.target.name]: "This field is required" }));
+        } else {
+          setFormValidate((state) => ({ ...state, [e.target.name]: false }));
+        }
 
         break;
       default:
@@ -73,5 +100,5 @@ export default function useForm(submitHandler, initialValues) {
     e.preventDefault();
     submitHandler(values);
   };
-  return { values, onChange, onSubmit, formValidate };
+  return { values, onChange, onSubmit, formValidate, onTouch };
 }
