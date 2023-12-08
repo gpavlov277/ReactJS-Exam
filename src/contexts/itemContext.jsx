@@ -7,11 +7,13 @@ export const ItemProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({});
   const [createError, setCreateError] = useState({});
+  const [editError, setEditError] = useState({});
 
   const token = JSON.parse(localStorage.getItem("auth")).token;
   const userId = JSON.parse(localStorage.getItem("auth"))._id;
 
   const navigate = useNavigate();
+
   const onCreateSubmit = async (values) => {
     setIsLoading(true);
     values = { ...values, token, userId };
@@ -36,13 +38,38 @@ export const ItemProvider = ({ children }) => {
       });
   };
 
+  const onEditSubmit = async (values, themeId) => {
+    setIsLoading(true);
+    values = { ...values, token, userId, themeId };
+
+    await itemService
+      .edit(themeId, values)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Please login to continue!");
+        }
+        res.json();
+      })
+      .then((result) => {
+        setEditError(result);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setEditError(err);
+      });
+  };
+
   const values = {
     onCreateSubmit,
+    onEditSubmit,
     data,
     setData,
     setCreateError,
     createError,
     isLoading,
+    editError,
+    setEditError,
   };
   return <ItemContext.Provider value={values}>{children}</ItemContext.Provider>;
 };

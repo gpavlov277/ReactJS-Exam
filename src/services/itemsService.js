@@ -23,3 +23,14 @@ export const create = async (itemData) => {
 
   return response;
 };
+
+export const edit = async (itemId, itemData) => {
+  const response = await fetch(`${baseUrl}/edit/${itemId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(itemData),
+  });
+  return response;
+};

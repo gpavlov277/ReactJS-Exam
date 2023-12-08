@@ -28,10 +28,15 @@ function App() {
               </ItemProvider>
             }
           ></Route>
+          <Route
+            path="/edit/item/:itemId"
+            element={
+              <ItemProvider>
+                <EditItem />
+              </ItemProvider>
+            }
+          />
 
-          <Route path="/edit/item/:itemId" element={<EditItem />} />
-
-          <Route path="/item/:itemId/edit" element={""}></Route>
           <Route path="/item/:itemId" element={<ItemDetails></ItemDetails>}></Route>
         </Routes>
       </AuthProvider>
