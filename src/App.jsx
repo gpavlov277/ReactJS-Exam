@@ -37,7 +37,14 @@ function App() {
             }
           />
 
-          <Route path="/item/:itemId" element={<ItemDetails></ItemDetails>}></Route>
+          <Route
+            path="/item/:itemId"
+            element={
+              <ItemProvider>
+                <ItemDetails></ItemDetails>
+              </ItemProvider>
+            }
+          ></Route>
         </Routes>
       </AuthProvider>
 

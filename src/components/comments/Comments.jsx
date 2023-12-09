@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
 import "./Comments.css";
+import { useEffect, useState } from "react";
+
+import { Link } from "react-router-dom";
 
 import NavDropdown from "react-bootstrap/NavDropdown";
+import DeleteModal from "../delete-modal/DeleteModal";
 
 import * as commentService from "../../services/commentService";
-import { Link } from "react-router-dom";
-import DeleteModal from "../delete-modal/DeleteModal";
+
 export default function Comments({ item }) {
   const [comments, setComments] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -18,6 +20,7 @@ export default function Comments({ item }) {
   }, []);
 
   const loggedUserId = JSON.parse(localStorage.getItem("auth"))._id;
+  const loggedUserImage = JSON.parse(localStorage.getItem("auth"))?.userImg;
 
   const currComments = comments.filter((x) => x?.themeId?._id === item._id);
 
@@ -30,10 +33,11 @@ export default function Comments({ item }) {
   const onClickShowModal = () => {
     setShowModal(true);
   };
+
   return (
     <>
-      {" "}
-      <DeleteModal showModal={showModal} setShowModal={setShowModal} />
+      <DeleteModal showModal={showModal} setShowModal={setShowModal} item={item} />
+
       <div className="container mt-5 mb-5">
         <div className="d-flex justify-content-center row">
           <div className="d-flex flex-column col-md-12">
@@ -77,11 +81,9 @@ export default function Comments({ item }) {
             </div>
             <div className="coment-bottom bg-white p-2 px-4">
               <div className="d-flex flex-row add-comment-section mt-4 mb-4">
-                <img
-                  className="img-fluid img-responsive rounded-circle mr-5"
-                  src="https://i.imgur.com/qdiP4DB.jpg"
-                  width="70px"
-                />
+                <div className="profile-image d-flex align-items-center">
+                  <img className="rounded-circle" src={loggedUserImage} width="50" height="50" />
+                </div>
                 <input type="text" className="btn" placeholder="Add comment" />
                 <button
                   className="btn btn-primary"

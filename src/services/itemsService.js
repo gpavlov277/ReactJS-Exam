@@ -34,3 +34,19 @@ export const edit = async (itemId, itemData) => {
   });
   return response;
 };
+
+export const deleteItem = async (itemId, token) => {
+  const data = {
+    itemId,
+    token,
+  };
+  const response = await fetch(`${baseUrl}/delete/${itemId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return response;
+};

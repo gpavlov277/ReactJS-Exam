@@ -8,6 +8,7 @@ export const ItemProvider = ({ children }) => {
   const [data, setData] = useState({});
   const [createError, setCreateError] = useState({});
   const [editError, setEditError] = useState({});
+  const [deleteError, setDeleteError] = useState({});
 
   const token = JSON.parse(localStorage.getItem("auth")).token;
   const userId = JSON.parse(localStorage.getItem("auth"))._id;
@@ -62,16 +63,36 @@ export const ItemProvider = ({ children }) => {
       });
   };
 
+  const onDeleteSubmit = async (itemId) => {
+    setIsLoading(true);
+    await itemService
+      .deleteItem(itemId, token)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Something went wrong!");
+        }
+        res.json();
+        navigate(`/`);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setDeleteError(err);
+        setIsLoading(false);
+      });
+  };
   const values = {
     onCreateSubmit,
     onEditSubmit,
     data,
     setData,
-    setCreateError,
     createError,
     isLoading,
     editError,
+    deleteError,
     setEditError,
+    setCreateError,
+    setDeleteError,
+    onDeleteSubmit,
   };
   return <ItemContext.Provider value={values}>{children}</ItemContext.Provider>;
 };
