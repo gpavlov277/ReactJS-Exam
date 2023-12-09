@@ -29,6 +29,7 @@ export const ItemProvider = ({ children }) => {
           setIsLoading(false);
         } else {
           setData(result);
+          navigate("/");
           setIsLoading(false);
         }
       })
@@ -53,6 +54,7 @@ export const ItemProvider = ({ children }) => {
       .then((result) => {
         setEditError(result);
         setIsLoading(false);
+        navigate(`/item/${themeId}`);
       })
       .catch((err) => {
         setIsLoading(false);

@@ -15,7 +15,6 @@ export default function useForm(submitHandler, initialValues) {
     image: false,
   });
 
-  // const { setCreateError } = useContext(ItemContext);
   const { setErr } = useContext(AuthContext);
 
   function onTouch(e) {
@@ -23,7 +22,7 @@ export default function useForm(submitHandler, initialValues) {
   }
   const onChange = (e) => {
     setErr({});
-    // setCreateError({});
+
     setValues((state) => ({ ...state, [e.target.name]: e.target.value }));
 
     switch (e.target.name) {

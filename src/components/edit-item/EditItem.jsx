@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as itemService from "../../services/itemsService";
 import useForm from "../../hooks/useForm";
 import ItemContext from "../../contexts/itemContext";
@@ -21,6 +21,7 @@ export default function EditItem() {
     image: "",
     details: "",
   });
+  const navigate = useNavigate();
   const { onEditSubmit, isLoading, editError, setEditError } = useContext(ItemContext);
   useEffect(() => {
     itemService
@@ -41,7 +42,6 @@ export default function EditItem() {
   const onSubmit = (e) => {
     e.preventDefault();
     const formInput = Object.fromEntries(new FormData(e.target));
-    console.log(formInput);
     onEditSubmit(formInput, itemId);
   };
 
@@ -108,14 +108,28 @@ export default function EditItem() {
             onFocus={onTouch}
           />
 
-          <p className="form-error">{editError?.message}</p>
+          <p className="form-error mb-2">{editError?.message}</p>
           {isLoading && (
             <div>
               <Loader />
             </div>
           )}
 
-          <input type="submit" className="fadeIn first" value="Save" />
+          <input type="submit" className="btn btn-success fadeIn mb-3 mt-0" value="Save" />
+
+          <input
+            onClick={() => {
+              navigate(`/item/${item._id}`);
+            }}
+            type="button"
+            className="btn btn-danger mb-3 mt-0 fadeIn"
+            style={{
+              padding: "13px 50px",
+              fontSize: "13px",
+              textTransform: "uppercase",
+            }}
+            value="Cancel"
+          />
         </form>
       </div>
     </div>

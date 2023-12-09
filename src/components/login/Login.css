@@ -130,7 +130,7 @@ input[type=reset]:active {
 input[type=text],
 input[type=password],
 :focus {
-    background-color: #fff;
+    /* background-color: #fff; */
     border-bottom: 2px solid #5fbae9;
 }
 

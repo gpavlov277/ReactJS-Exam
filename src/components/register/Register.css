@@ -128,17 +128,17 @@ input[type=reset]:active {
 
 
 input[type=text]:focus {
-    background-color: #fff;
+    /* background-color: #fff; */
     border: 1px solid #5fbae9;
 }
 
 input[type=password]:focus {
-    background-color: #fff;
+    /* background-color: #fff; */
     border: 1px solid #5fbae9;
 }
 
 input[type=email]:focus {
-    background-color: #fff;
+    /* background-color: #fff; */
     border: 1px solid #5fbae9;
 }
 
@@ -172,7 +172,10 @@ input[type=email] {
     box-sizing: border-box;
 }
 
-
+.btn-danger {
+    background-color: #bd2130 !important;
+    color: white;
+}
 
 
 /* ANIMATIONS */
