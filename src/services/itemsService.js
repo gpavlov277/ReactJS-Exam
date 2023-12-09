@@ -64,3 +64,58 @@ export const addComment = async (data) => {
 
   return response;
 };
+
+export const deleteComment = async (data) => {
+  const { themeId, postId } = data;
+
+  const response = await fetch(`${baseUrl}/${themeId}/posts/${postId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return response;
+};
+
+export const editComment = async (data) => {
+  const { themeId, postId } = data;
+
+  const response = await fetch(`${baseUrl}/${themeId}/posts/${postId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return response;
+};
+
+export const likeItem = async (data) => {
+  const { themeId } = data;
+
+  const response = await fetch(`${baseUrl}/${themeId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return response;
+};
+export const dislikeItem = async (data) => {
+  const { themeId } = data;
+
+  const response = await fetch(`${baseUrl}/dislike/${themeId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return response;
+};

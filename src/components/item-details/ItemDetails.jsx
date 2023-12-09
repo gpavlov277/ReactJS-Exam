@@ -1,13 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Comments from "../comments/Comments";
 
 import * as itemService from "../../services/itemsService";
 import { useNavigate, useParams } from "react-router-dom";
 import OverlayLoader from "../loader/OverlayLoader";
+import Loader from "../loader/Loader";
+import ItemContext, { ItemProvider } from "../../contexts/itemContext";
 export default function ItemDetails() {
   const { itemId } = useParams();
   const [item, setItem] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+
+  const { likeCommentLoader } = useContext(ItemContext);
 
   const navigate = useNavigate();
 
@@ -27,7 +31,7 @@ export default function ItemDetails() {
       .catch((err) => {
         navigate("/");
       });
-  }, []);
+  }, [likeCommentLoader]);
 
   const getDetails = (item) => {
     if (item.details) {
@@ -65,7 +69,9 @@ export default function ItemDetails() {
               </ul>
             </div>
           </div>
-          {isAuth && <Comments item={item} />}
+
+          {/* {isAuth && <Comments item={item} />} */}
+          <Comments item={item} />
         </div>
       )}
     </>

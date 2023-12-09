@@ -13,7 +13,7 @@ export default function Header() {
     <Navbar expand="xl" className="bg-body-tertiary">
       <Container style={{ maxWidth: "1560px" }}>
         <Navbar.Brand as={Link} to={"/"}>
-          SilverStar Portal
+          Social Media
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

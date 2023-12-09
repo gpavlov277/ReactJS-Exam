@@ -10,19 +10,41 @@ import * as commentService from "../../services/commentService";
 import ItemContext from "../../contexts/itemContext";
 import Loader from "../loader/Loader";
 
+import moment from "moment/moment";
+
 export default function Comments({ item }) {
-  const { onAddComment, addCommentError, setAddCommentError, isLoading } = useContext(ItemContext);
+  const isAuth = JSON.parse(localStorage.getItem("auth")).token;
+  const {
+    onAddComment,
+    onDeleteComment,
+    onEditComment,
+    onLikeItem,
+    onDislikeItem,
+
+    addCommentError,
+    setAddCommentError,
+    isLoading,
+    isLoadingComment,
+  } = useContext(ItemContext);
 
   const [comments, setComments] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [newComment, setNewComment] = useState("");
+
+  const [hideAdd, setHideAdd] = useState(false);
+  const [formSettings, setFormSettings] = useState({
+    placeholder: "Add Comment",
+    value: "",
+    postId: "",
+    themeId: item._id,
+  });
 
   useEffect(() => {
     commentService
       .getAll()
       .then((result) => setComments(result))
       .catch((err) => console.log(err));
-  }, [isLoading]);
+  }, [isLoading, isLoadingComment]);
 
   const loggedUserId = JSON.parse(localStorage.getItem("auth"))._id;
   const loggedUserImage = JSON.parse(localStorage.getItem("auth"))?.userImg;
@@ -42,19 +64,49 @@ export default function Comments({ item }) {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     const data = {
-      postText: newComment,
+      postText: formSettings.value,
       themeId: item._id,
     };
     onAddComment(data);
-    setNewComment("");
+    setFormSettings((state) => ({ ...state, value: "" }));
+  };
+
+  const onEditSubmit = () => {
+    toggleAdd();
+    onEditComment(formSettings);
   };
 
   const onChange = (e) => {
     const newCommentValue = e.target.value;
     setAddCommentError({});
-    setNewComment(newCommentValue);
+    setFormSettings((state) => ({ ...state, value: newCommentValue }));
   };
 
+  const commentDeleteModalHandler = (commentId) => {
+    onDeleteComment(commentId, item._id);
+  };
+
+  const toggleEdit = (c) => {
+    setFormSettings((state) => ({
+      ...state,
+      value: c.text,
+      postId: c._id,
+      placeholder: "Edit Comment",
+    }));
+    setHideAdd(true);
+    console.log(formSettings);
+  };
+  const toggleAdd = () => {
+    setFormSettings((state) => ({ ...state, value: "", placeholder: "Add Comment" }));
+    setHideAdd(false);
+  };
+
+  const onItemLikeHandler = () => {
+    onLikeItem(item._id);
+  };
+  const onItemDislikeHandler = () => {
+    onDislikeItem(item._id);
+  };
   return (
     <>
       <DeleteModal showModal={showModal} setShowModal={setShowModal} item={item} />
@@ -72,12 +124,12 @@ export default function Comments({ item }) {
                 />
               </div>
               <div className="d-flex flex-column-reverse flex-grow-0 align-items-center votings ml-1">
-                <i className="fa fa-sort-up fa-2x hit-voting"></i>
+                <i className="fa fa-sort-up fa-2x hit-voting" onClick={onItemLikeHandler}></i>
                 <span className="m-1">
                   {item?.subscribers?.length}
                   <span>❤️</span>
                 </span>
-                <i className="fa fa-sort-down fa-2x hit-voting"></i>
+                <i className="fa fa-sort-down fa-2x hit-voting" onClick={onItemDislikeHandler}></i>
               </div>
               <div className="d-flex flex-column ml-4">
                 <div className="d-flex flex-row post-title">
@@ -87,7 +139,7 @@ export default function Comments({ item }) {
                 <div className="d-flex flex-row align-items-center align-content-center post-title">
                   <span className="bdge m-2">{item?.heading}</span>
                   <span className="mr-2 dot"></span>
-                  <span className="m-2">{item?.created_at}</span>
+                  <span className="m-2">{moment(item?.created_at).fromNow()}</span>
 
                   {isItemAuthor && (
                     <NavDropdown title="✏️" id="basic-nav-dropdown">
@@ -100,68 +152,99 @@ export default function Comments({ item }) {
                 </div>
               </div>
             </div>
-            <div className="coment-bottom bg-white p-2 px-4">
-              <div className="d-flex flex-row add-comment-section mt-4 mb-4">
-                <div className="profile-image d-flex align-items-center">
-                  <img className="rounded-circle" src={loggedUserImage} width="50" height="50" />
+
+            {isAuth && (
+              <div className="coment-bottom bg-white p-2 px-4">
+                <div className="d-flex flex-row add-comment-section mt-4 mb-4">
+                  <div className="profile-image d-flex align-items-center">
+                    <img className="rounded-circle" src={loggedUserImage} width="50" height="50" />
+                  </div>
+
+                  <form onSubmit={onSubmitHandler}>
+                    <div className="d-flex justify-content-center">
+                      <input
+                        type="text"
+                        name="postText"
+                        className="btn"
+                        placeholder={formSettings.placeholder}
+                        onChange={onChange}
+                        value={formSettings.value}
+                      />
+
+                      {hideAdd ? (
+                        <>
+                          <button
+                            className="btn btn-success m-1"
+                            type="button"
+                            style={{ maxHeight: "45px", alignSelf: "center" }}
+                            onClick={onEditSubmit}
+                          >
+                            {isLoading ? <Loader /> : "Edit"}
+                          </button>
+
+                          <button
+                            className="btn btn-dark m-1"
+                            type="button"
+                            style={{ maxHeight: "45px", alignSelf: "center" }}
+                            onClick={() => toggleAdd()}
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          className="btn btn-primary"
+                          type="submit"
+                          style={{ maxHeight: "45px", alignSelf: "center" }}
+                        >
+                          {isLoading ? <Loader /> : "Add"}
+                        </button>
+                      )}
+                    </div>
+                    <p className="form-error mb-2 text-center">{addCommentError?.message}</p>
+                  </form>
                 </div>
+                {currComments.map((c) => (
+                  <div className="commented-section mt-2" key={c._id}>
+                    <div className="d-flex flex-row align-items-center commented-user">
+                      <h5 className="m-2">{c.userId.username}</h5>
+                      <span className="mr-2 dot"></span>
+                      <span className="m-2">{moment(c.created_at).fromNow()}</span>
+                      <>
+                        {isPostAuthor(loggedUserId, c?.userId?._id) && (
+                          <NavDropdown title="✏️" id="basic-nav-dropdown">
+                            <NavDropdown.Item onClick={() => toggleEdit(c)}>Edit</NavDropdown.Item>
+                            <NavDropdown
+                              title="Delete"
+                              style={{ padding: "16px" }}
+                              id="basic-nav-dropdown"
+                            >
+                              <NavDropdown.Item onClick={() => commentDeleteModalHandler(c._id)}>
+                                Yes
+                              </NavDropdown.Item>
+                              <NavDropdown.Item>No</NavDropdown.Item>
+                            </NavDropdown>
+                          </NavDropdown>
+                        )}
+                      </>
+                    </div>
+                    <div className="comment-text-sm">
+                      <span>{c.text}</span>
+                    </div>
 
-                <form onSubmit={onSubmitHandler}>
-                  <div className="d-flex justify-content-center">
-                    <input
-                      type="text"
-                      name="postText"
-                      className="btn"
-                      placeholder="Add comment"
-                      onChange={onChange}
-                      value={newComment}
-                    />
-
-                    <button
-                      className="btn btn-primary"
-                      type="submit"
-                      style={{ maxHeight: "45px", alignSelf: "center" }}
-                    >
-                      {isLoading ? <Loader /> : "Add"}
-                    </button>
-                  </div>
-                  <p className="form-error mb-2 text-center">{addCommentError?.message}</p>
-                </form>
-              </div>
-              {currComments.map((c) => (
-                <div className="commented-section mt-2" key={c._id}>
-                  <div className="d-flex flex-row align-items-center commented-user">
-                    <h5 className="m-2">{c.userId.username}</h5>
-                    <span className="mr-2 dot"></span>
-                    <span className="m-2">{c.created_at}</span>
-
-                    {isPostAuthor(loggedUserId, c?.userId?._id) && (
-                      <NavDropdown title="✏️" id="basic-nav-dropdown">
-                        <NavDropdown.Item as={Link} to={"/profile-settings"}>
-                          Edit
-                        </NavDropdown.Item>
-                        <NavDropdown.Item as={Link} to={"/profile-settings"}>
-                          Delete
-                        </NavDropdown.Item>
-                      </NavDropdown>
-                    )}
-                  </div>
-                  <div className="comment-text-sm">
-                    <span>{c.text}</span>
-                  </div>
-
-                  <div className="reply-section">
-                    <div className="d-flex flex-row align-items-center voting-icons">
-                      <i className="fa fa-sort-up fa-2x mt-3 hit-voting"></i>
-                      <i className="fa fa-sort-down fa-2x mb-3 hit-voting"></i>
-                      <span className="m-2">{c.likes.length}</span>
-                      <span className="dot m-2"></span>
-                      <h6 className="ml-2 mb-0">Likes</h6>
+                    <div className="reply-section">
+                      <div className="d-flex flex-row align-items-center voting-icons">
+                        <i className="fa fa-sort-up fa-2x mt-3 hit-voting"></i>
+                        <i className="fa fa-sort-down fa-2x mb-3 hit-voting"></i>
+                        <span className="m-2">{c.likes.length}</span>
+                        <span className="dot m-2"></span>
+                        <h6 className="ml-2 mb-0">Likes</h6>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

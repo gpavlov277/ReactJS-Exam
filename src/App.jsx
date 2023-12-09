@@ -10,6 +10,7 @@ import Create from "./components/create/Create";
 import { ItemProvider } from "./contexts/itemContext";
 import EditItem from "./components/edit-item/EditItem";
 import AuthGuard from "./components/guards/authGuard";
+import Profile from "./components/profile/Profile";
 function App() {
   return (
     <>
@@ -38,6 +39,7 @@ function App() {
                 </ItemProvider>
               }
             />
+            <Route path="/profile-settings" element={<Profile />}></Route>
           </Route>
           <Route
             path="/item/:itemId"
