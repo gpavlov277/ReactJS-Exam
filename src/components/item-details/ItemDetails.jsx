@@ -2,20 +2,31 @@ import { useEffect, useState } from "react";
 import Comments from "../comments/Comments";
 
 import * as itemService from "../../services/itemsService";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import OverlayLoader from "../loader/OverlayLoader";
 export default function ItemDetails() {
   const { itemId } = useParams();
   const [item, setItem] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
+  const navigate = useNavigate();
+
+  const isAuth = JSON.parse(localStorage.getItem("auth")).token;
+
   useEffect(() => {
     itemService
       .getOne(itemId)
       .then((result) => {
-        setItem(result), setIsLoading(false);
+        setItem(result);
+        setIsLoading(false);
+
+        if (result.message) {
+          throw new Error("Not Found!");
+        }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        navigate("/");
+      });
   }, []);
 
   const getDetails = (item) => {
@@ -54,7 +65,7 @@ export default function ItemDetails() {
               </ul>
             </div>
           </div>
-          <Comments item={item} />
+          {isAuth && <Comments item={item} />}
         </div>
       )}
     </>

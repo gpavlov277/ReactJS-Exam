@@ -9,6 +9,7 @@ import ItemDetails from "./components/item-details/ItemDetails";
 import Create from "./components/create/Create";
 import { ItemProvider } from "./contexts/itemContext";
 import EditItem from "./components/edit-item/EditItem";
+import AuthGuard from "./components/guards/authGuard";
 function App() {
   return (
     <>
@@ -20,23 +21,24 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
 
-          <Route
-            path="/create/item"
-            element={
-              <ItemProvider>
-                <Create />
-              </ItemProvider>
-            }
-          ></Route>
-          <Route
-            path="/edit/item/:itemId"
-            element={
-              <ItemProvider>
-                <EditItem />
-              </ItemProvider>
-            }
-          />
-
+          <Route element={<AuthGuard></AuthGuard>}>
+            <Route
+              path="/create/item"
+              element={
+                <ItemProvider>
+                  <Create />
+                </ItemProvider>
+              }
+            ></Route>
+            <Route
+              path="/edit/item/:itemId"
+              element={
+                <ItemProvider>
+                  <EditItem />
+                </ItemProvider>
+              }
+            />
+          </Route>
           <Route
             path="/item/:itemId"
             element={

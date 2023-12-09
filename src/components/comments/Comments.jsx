@@ -1,5 +1,5 @@
 import "./Comments.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -7,17 +7,22 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import DeleteModal from "../delete-modal/DeleteModal";
 
 import * as commentService from "../../services/commentService";
+import ItemContext from "../../contexts/itemContext";
+import Loader from "../loader/Loader";
 
 export default function Comments({ item }) {
+  const { onAddComment, addCommentError, setAddCommentError, isLoading } = useContext(ItemContext);
+
   const [comments, setComments] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     commentService
       .getAll()
       .then((result) => setComments(result))
       .catch((err) => console.log(err));
-  }, []);
+  }, [isLoading]);
 
   const loggedUserId = JSON.parse(localStorage.getItem("auth"))._id;
   const loggedUserImage = JSON.parse(localStorage.getItem("auth"))?.userImg;
@@ -32,6 +37,22 @@ export default function Comments({ item }) {
 
   const onClickShowModal = () => {
     setShowModal(true);
+  };
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    const data = {
+      postText: newComment,
+      themeId: item._id,
+    };
+    onAddComment(data);
+    setNewComment("");
+  };
+
+  const onChange = (e) => {
+    const newCommentValue = e.target.value;
+    setAddCommentError({});
+    setNewComment(newCommentValue);
   };
 
   return (
@@ -84,14 +105,28 @@ export default function Comments({ item }) {
                 <div className="profile-image d-flex align-items-center">
                   <img className="rounded-circle" src={loggedUserImage} width="50" height="50" />
                 </div>
-                <input type="text" className="btn" placeholder="Add comment" />
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  style={{ maxHeight: "40px", alignSelf: "center" }}
-                >
-                  Comment
-                </button>
+
+                <form onSubmit={onSubmitHandler}>
+                  <div className="d-flex justify-content-center">
+                    <input
+                      type="text"
+                      name="postText"
+                      className="btn"
+                      placeholder="Add comment"
+                      onChange={onChange}
+                      value={newComment}
+                    />
+
+                    <button
+                      className="btn btn-primary"
+                      type="submit"
+                      style={{ maxHeight: "45px", alignSelf: "center" }}
+                    >
+                      {isLoading ? <Loader /> : "Add"}
+                    </button>
+                  </div>
+                  <p className="form-error mb-2 text-center">{addCommentError?.message}</p>
+                </form>
               </div>
               {currComments.map((c) => (
                 <div className="commented-section mt-2" key={c._id}>

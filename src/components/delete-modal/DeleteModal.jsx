@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ItemContext from "../../contexts/itemContext";
 import OverlayLoader from "../loader/OverlayLoader";
+import AuthContext from "../../contexts/authContext";
 
 export default function DeleteModal({ setShowModal, showModal, item }) {
   const { onDeleteSubmit, deleteError, setDeleteError } = useContext(ItemContext);
@@ -13,6 +14,7 @@ export default function DeleteModal({ setShowModal, showModal, item }) {
   useEffect(() => {
     setDeleteError({});
   }, []);
+
   return (
     <>
       <Modal show={showModal} onHide={onHideClickHandler} backdrop="static" keyboard={true}>

@@ -21,9 +21,6 @@ export default function Header() {
             <Nav.Link as={Link} to={"/"}>
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to={"/create/item"}>
-              Create
-            </Nav.Link>
 
             {!isAuth && (
               <>
@@ -38,17 +35,22 @@ export default function Header() {
             )}
 
             {isAuth && (
-              <NavDropdown title={username} id="basic-nav-dropdown">
-                <NavDropdown.Item as={Link} to={"/profile-settings"}>
-                  Settings
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to={"/profile-settings"}>
-                  Information
-                </NavDropdown.Item>
+              <>
+                <Nav.Link as={Link} to={"/create/item"}>
+                  Create
+                </Nav.Link>
+                <NavDropdown title={username} id="basic-nav-dropdown">
+                  <NavDropdown.Item as={Link} to={"/profile-settings"}>
+                    Settings
+                  </NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to={"/profile-settings"}>
+                    Information
+                  </NavDropdown.Item>
 
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
-              </NavDropdown>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
+                </NavDropdown>
+              </>
             )}
           </Nav>
         </Navbar.Collapse>

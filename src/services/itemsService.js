@@ -50,3 +50,17 @@ export const deleteItem = async (itemId, token) => {
 
   return response;
 };
+
+export const addComment = async (data) => {
+  const { themeId } = data;
+
+  const response = await fetch(`${baseUrl}/${themeId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return response;
+};
