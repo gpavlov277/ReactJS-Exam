@@ -219,6 +219,8 @@ export const ItemProvider = ({ children }) => {
 
     setLikeCommentLoader,
     likeCommentLoader,
+
+    userId,
   };
   return <ItemContext.Provider value={values}>{children}</ItemContext.Provider>;
 };

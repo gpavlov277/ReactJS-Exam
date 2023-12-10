@@ -21,13 +21,19 @@ export default function EditItem() {
     image: "",
     details: "",
   });
+
   const navigate = useNavigate();
-  const { onEditSubmit, isLoading, editError, setEditError } = useContext(ItemContext);
+  const { onEditSubmit, isLoading, editError, setEditError, userId } = useContext(ItemContext);
+
   useEffect(() => {
     itemService
       .getOne(itemId)
       .then((data) => {
         setItem(data);
+
+        if (data.userId._id !== userId) {
+          navigate("/login");
+        }
       })
       .catch((err) => console.log(err));
   }, [itemId]);
