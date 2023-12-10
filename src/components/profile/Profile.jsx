@@ -3,13 +3,12 @@ import styles from "./Profile.module.css";
 
 const user = JSON.parse(localStorage.getItem("auth"));
 
-const navigate = useNavigate();
-
-function handleClick() {
-  navigate("/");
-}
-console.log(user);
 export default function Profile() {
+  const navigate = useNavigate();
+
+  function handleClick() {
+    navigate(-1);
+  }
   return (
     <div className="mt-5" style={{ minHeight: "77vh" }}>
       <div className={styles.card}>
@@ -17,9 +16,13 @@ export default function Profile() {
         <h1>{user.username}</h1>
 
         <p>Email: {user.email}</p>
+        <p>Created Items: {user.themes.length}</p>
+        <p>Total Comments: {user.posts.length}</p>
 
         <p>
-          <button onClick={handleClick}>Back</button>
+          <button className={styles["btn-profile"]} onClick={handleClick}>
+            Back
+          </button>
         </p>
       </div>
     </div>

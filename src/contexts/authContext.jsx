@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     if (response.ok) {
       const result = await response.json();
       setAuth(result);
-      console.log(result);
+
       navigate("/");
       setIsLoading(false);
     } else {

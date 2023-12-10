@@ -17,8 +17,6 @@ export default function List() {
       .catch((err) => console.log(err));
   }, []);
 
-  console.log(items);
-
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-center">{isLoading && <Loader />}</div>
